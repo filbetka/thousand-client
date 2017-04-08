@@ -1,4 +1,4 @@
-#include "http_request.h"
+#include "http.h"
 
 
 Post_Data::Post_Data(QString csrf)
@@ -20,9 +20,14 @@ void Post_Data::Set_Url(QString url)
     this->url = url;
 }
 
+void Post_Data::Set_Path(QString path)
+{
+    this->path = path;
+}
+
 QByteArray Post_Data::Get_Url()
 {
-    return this->url.toUtf8();
+    return (this->url + this->path).toUtf8();
 }
 
 QByteArray Post_Data::Get_Data()
@@ -85,7 +90,6 @@ QJsonObject Http_Request::POST(Post_Data data)
 void Http_Request::Set_CSRF(QString url)
 {
     QJsonObject reply = this->GET(url);
-    qDebug() << reply.value("csrfmiddlewaretoken").toString();
     this->csrf = reply.value("csrfmiddlewaretoken").toString();
 }
 
@@ -96,31 +100,35 @@ QString Http_Request::Get_CSRF()
 
 
 
-Form_Manager::Form_Manager(QString url)
+Http_Manager::Http_Manager(QString url)
 {
     if (!url.isEmpty())
         this->Set_Url(url);
 }
 
-void Form_Manager::Set_Url(QString url)
+Http_Manager* Http_Manager::Get_Http_Manager()
+{
+    static Http_Manager* connection =
+            new Http_Manager("http://localhost:8000/");
+
+    return connection;
+}
+
+void Http_Manager::Set_Url(QString url)
 {
     this->url = url;
     this->http.Set_CSRF(url);
 }
 
-QJsonObject Form_Manager::Send(Post_Data& data)
+QJsonObject Http_Manager::Send(Post_Data& data)
 {
     return this->http.POST(data);
 }
 
-Post_Data Form_Manager::Login(QString email, QString password)
+Post_Data Http_Manager::Create_Data()
 {
     Post_Data data(this->http.Get_CSRF());
-    data.Set_Url(this->url + "user/sign_in/");
-
-    data.Add_Variable("email", email);
-    data.Add_Variable("password", password);
-    data.Add_Variable("__form__", "login");
+    data.Set_Url(this->url);
 
     return data;
 }

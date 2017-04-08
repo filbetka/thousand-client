@@ -11,6 +11,7 @@ class Post_Data
     private:
 
         QString url;
+        QString path;
         QString data;
 
     public:
@@ -19,6 +20,7 @@ class Post_Data
 
         void Add_Variable(QString name, QString value);
         void Set_Url(QString url);
+        void Set_Path(QString path);
 
         QByteArray Get_Url();
         QByteArray Get_Data();
@@ -51,7 +53,7 @@ class Http_Request: public QObject
 
 
 
-class Form_Manager
+class Http_Manager
 {
 
     private:
@@ -61,12 +63,12 @@ class Form_Manager
 
     public:
 
-        Form_Manager(QString url="");
+        Http_Manager(QString url="");
+        static Http_Manager* Get_Http_Manager(); // singleton
 
         void Set_Url(QString url);
         QJsonObject Send(Post_Data& data);
-
-        Post_Data Login(QString email, QString password);
+        Post_Data Create_Data();
 
 };
 

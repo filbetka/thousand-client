@@ -14,7 +14,17 @@ TEMPLATE = app
 
 SOURCES += main.cpp\
         game.cpp \
-    http_request.cpp
+    http.cpp \
+    user.cpp \
+    card.cpp \
+    style.cpp \
+    chat.cpp \
+    table.cpp
 
 HEADERS  += game.h \
-    http_request.h
+    http.h \
+    user.h \
+    card.h \
+    style.h \
+    chat.h \
+    table.h
