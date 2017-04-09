@@ -19,7 +19,8 @@ SOURCES += main.cpp\
     card.cpp \
     style.cpp \
     chat.cpp \
-    table.cpp
+    table.cpp \
+    init_game.cpp
 
 HEADERS  += game.h \
     http.h \
@@ -27,4 +28,5 @@ HEADERS  += game.h \
     card.h \
     style.h \
     chat.h \
-    table.h
+    table.h \
+    init_game.h

@@ -54,9 +54,13 @@ class Card: public QPushButton
         void Create_Card();
         void Set_Style();
 
+        COLOR Get_Color(QString color);
+        RANK Get_Rank(QString rank);
+
     public:
 
         Card(COLOR color, RANK rank);
+        Card(QString color, QString rank);
 
         static QString Get_Rank_Name(RANK rank);
         static QString Get_Color_Path(COLOR color);

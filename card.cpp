@@ -27,6 +27,14 @@ Card::Card(COLOR color, RANK rank):
     this->Create_Card();
 }
 
+Card::Card(QString color, QString rank):
+    QPushButton(NULL)
+{
+    this->color = this->Get_Color(color);
+    this->rank = this->Get_Rank(rank);
+    this->Create_Card();
+}
+
 void Card::Create_Card()
 {
         // layout
@@ -56,12 +64,13 @@ void Card::Create_Card()
     this->setIconSize(QSize(64, 64));
     this->setMinimumSize(100, 150);
     this->setMaximumSize(100, 150);
+    this->setObjectName("card");
     this->Set_Style();
 }
 
 void Card::Set_Style()
 {
-    Style card("QPushButton");
+    Style card("#card");
     card.Add_Value("background-color", "white");
 
     Style text("QLabel");
@@ -79,6 +88,46 @@ void Card::Set_Style()
 
     this->setStyleSheet(card.Get_Style() +
                         text.Get_Style());
+}
+
+COLOR Card::Get_Color(QString color)
+{
+    if (color == "Heart")
+        return HEART;
+
+    if (color == "Diamond")
+        return DIAMOND;
+
+    if (color == "Clover")
+        return CLOVER;
+
+    if (color == "Spades")
+        return SPADES;
+
+    return NONE_COLOR;
+}
+
+RANK Card::Get_Rank(QString rank)
+{
+    if (rank == "Ace")
+        return ACE;
+
+    if (rank == "10")
+        return _10;
+
+    if (rank == "King")
+        return KING;
+
+    if (rank == "Queen")
+        return QUEEN;
+
+    if (rank == "Jack")
+        return JACK;
+
+    if (rank == "9")
+        return _9;
+
+    return NONE_RANK;
 }
 
 QString Card::Get_Rank_Name(RANK rank)

@@ -39,15 +39,12 @@ class Chat : public QWidget
         void Create_Message(QString user,
                 QString message, QString date);
 
-    public slots:
-
-        void Load_All_Messages();
-
     public:
 
         Chat();
 
         void Send_New_Message(QString message);
+        void Load_All_Messages(QJsonObject reply);
 
 };
 

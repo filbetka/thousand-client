@@ -46,11 +46,6 @@ void Chat::Create_Chat()
 
     this->setLayout(layout);
     this->setMinimumWidth(300);
-
-        // timer
-    QTimer* timer = new QTimer(this);
-    QObject::connect(timer, SIGNAL(timeout()), this, SLOT(Load_All_Messages()));
-    timer->start(1000);
 }
 
 void Chat::Create_Message(QString user, QString message, QString date)
@@ -107,24 +102,8 @@ void Chat::Create_Message(QString user, QString message, QString date)
     this->message_list->setItemWidget(item, widget);
 }
 
-void Chat::Load_All_Messages()
+void Chat::Load_All_Messages(QJsonObject reply)
 {
-
-                    // create post
-                Post_Data x = this->network->Create_Data();
-                x.Set_Path("game/status/");
-
-                    // send post
-                this->network->Send(x);
-
-
-        // create post
-    Post_Data data = this->network->Create_Data();
-    data.Set_Path("game/chat/");
-    data.Add_Variable("__get__", "");
-
-        // send post
-    QJsonObject reply = this->network->Send(data);
     QJsonArray messages = reply.value("messages").toArray();
 
         // display in message list
