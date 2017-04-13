@@ -13,9 +13,10 @@ class User: public QDialog
     private:
 
         Http_Manager* network;
-        QLineEdit* username;
-        QLineEdit* password;
+        QLineEdit* username_form;
+        QLineEdit* password_form;
         bool is_logged;
+        QString username;
 
         void Create_Dialog();
 
@@ -30,6 +31,9 @@ class User: public QDialog
 
         bool Sign_In(QString username, QString password);
         bool Sign_Up(QString username, QString password);
+        bool Sign_Out();
+
+        QString Get_Username();
 
         void keyPressEvent(QKeyEvent* event);
         void closeEvent(QCloseEvent* event);

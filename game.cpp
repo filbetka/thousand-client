@@ -4,6 +4,7 @@
 Game::Game(QWidget* parent): QMainWindow(parent)
 {
     this->network = Http_Manager::Get_Http_Manager();
+    this->init_game = new Init_Game(this);
     this->user = new User(this);
     this->user->show();
 
@@ -15,8 +16,9 @@ void Game::Create_Window()
     QWidget* game = new QWidget;
     QHBoxLayout* layout = new QHBoxLayout;
 
-    this->table = new Table;
-    this->chat = new Chat;
+    this->table = new Table(this);
+    this->chat = new Chat(this);
+    this->bidding = new Bidding(this);
 
         // buttons
     Style button_style("QPushButton");
@@ -61,37 +63,68 @@ void Game::Create_Window()
     timer->start(1000);
 }
 
+void Game::Launch_Bidding(QJsonObject reply)
+{
+        // users don't bidding
+    if (!reply.value("is_bidding").toBool())
+    {
+        if (this->bidding->isVisible())
+            this->bidding->close();
+
+        return;
+    }
+
+        // bidding not shown
+    if (!this->bidding->isVisible())
+        bidding->show();
+
+    this->bidding->Load_Biddings(reply);
+}
+
+void Game::Winner_Bidding(QJsonObject reply)
+{
+    if (reply.contains("win_bidding"))
+    {
+        QJsonObject win_bidding = reply.value("win_bidding").toObject();
+        QString username = win_bidding.value("user").toString();
+        int points = win_bidding.value("points").toInt();
+
+        if (this->user->Get_Username() == username)
+        {
+            Dealing_Stock* dealing = new Dealing_Stock(this);
+            dealing->exec();
+        }
+    }
+}
+
 void Game::Logout_SLOT()
 {
+    this->user->Sign_Out();
     qApp->exit();
 }
 
 void Game::Create_Game_SLOT()
 {
-    Init_Game* dialog = new Init_Game(this);
-    dialog->show();
-}
-
-void Game::Check_Status_Game()
-{
-        // create post
-    Post_Data data = this->network->Create_Data();
-    data.Set_Path("game/status/");
-
-        // send post
-    QJsonObject reply = this->network->Send(data);
+    this->init_game->exec();
 }
 
 void Game::Get_Status_Game()
 {
     Post_Data data = this->network->Create_Data();
-    data.Set_Path("game/status/");
+    data.Set_Path("status/");
 
         // send post
     QJsonObject reply = this->network->Send(data);
     this->chat->Load_All_Messages(reply);
     this->table->Load_Cards(reply);
     this->table->Load_Stock(reply);
+    this->table->Update_Users(reply);
+    this->Launch_Bidding(reply);
+    this->Winner_Bidding(reply);
 }
 
-
+void Game::closeEvent(QCloseEvent* event)
+{
+    this->user->Sign_Out();
+    QMainWindow::closeEvent(event);
+}

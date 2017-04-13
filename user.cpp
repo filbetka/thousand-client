@@ -29,24 +29,24 @@ void User::Create_Dialog()
     username_style.Add_Value("font-size", "15px");
     username_style.Add_Value("color", "#0F0");
 
-    this->username = new QLineEdit;
-    this->username->setAlignment(Qt::AlignHCenter);
-    this->username->setMinimumHeight(30);
-    this->username->setMaximumHeight(30);
-    this->username->setPlaceholderText("Username");
-    this->username->setStyleSheet(username_style.Get_Style());
+    this->username_form = new QLineEdit;
+    this->username_form->setAlignment(Qt::AlignHCenter);
+    this->username_form->setMinimumHeight(30);
+    this->username_form->setMaximumHeight(30);
+    this->username_form->setPlaceholderText("Username");
+    this->username_form->setStyleSheet(username_style.Get_Style());
 
         // password
     Style password_style("QLineEdit");
     password_style.Add_Value("font-size", "15px");
     password_style.Add_Value("color", "#0F0");
 
-    this->password = new QLineEdit;
-    this->password->setAlignment(Qt::AlignHCenter);
-    this->password->setMinimumHeight(30);
-    this->password->setMaximumHeight(30);
-    this->password->setPlaceholderText("Password");
-    this->password->setStyleSheet(password_style.Get_Style());
+    this->password_form = new QLineEdit;
+    this->password_form->setAlignment(Qt::AlignHCenter);
+    this->password_form->setMinimumHeight(30);
+    this->password_form->setMaximumHeight(30);
+    this->password_form->setPlaceholderText("Password");
+    this->password_form->setStyleSheet(password_style.Get_Style());
 
         // buttons
     QPushButton* sign_in = new QPushButton("Sign in");
@@ -64,8 +64,8 @@ void User::Create_Dialog()
     QVBoxLayout* layout = new QVBoxLayout;
     layout->addWidget(main_title);
     layout->addWidget(after_title);
-    layout->addWidget(this->username);
-    layout->addWidget(this->password);
+    layout->addWidget(this->username_form);
+    layout->addWidget(this->password_form);
     layout->addLayout(button_layout);
 
     this->setLayout(layout);
@@ -73,8 +73,8 @@ void User::Create_Dialog()
 
 void User::Sign_In_SLOT()
 {
-    QString username = this->username->text();
-    QString password = this->password->text();
+    QString username = this->username_form->text();
+    QString password = this->password_form->text();
 
     if (this->Sign_In(username, password))
     {
@@ -91,8 +91,8 @@ void User::Sign_In_SLOT()
 
 void User::Sign_Up_SLOT()
 {
-    QString username = this->username->text();
-    QString password = this->password->text();
+    QString username = this->username_form->text();
+    QString password = this->password_form->text();
 
     if (this->Sign_Up(username, password))
     {
@@ -118,7 +118,12 @@ bool User::Sign_In(QString username, QString password)
 
         // send post
     QJsonObject reply = this->network->Send(data);
-    return reply.value("status").toBool();
+    bool status = reply.value("status").toBool();
+
+    if (status)
+        this->username = this->username_form->text();
+
+    return status;
 }
 
 bool User::Sign_Up(QString username, QString password)
@@ -132,6 +137,22 @@ bool User::Sign_Up(QString username, QString password)
         // send post
     QJsonObject reply = this->network->Send(data);
     return reply.value("status").toBool();
+}
+
+bool User::Sign_Out()
+{
+        // create post
+    Post_Data data = this->network->Create_Data();
+    data.Set_Path("user/sign_out/");
+
+        // send post
+    QJsonObject reply = this->network->Send(data);
+    return reply.value("status").toBool();
+}
+
+QString User::Get_Username()
+{
+    return this->username;
 }
 
 void User::keyPressEvent(QKeyEvent* event)

@@ -4,6 +4,9 @@
 #include <QtWidgets>
 #include <QStylePainter>
 #include "style.h"
+#include "http.h"
+class Table;
+
 
 enum COLOR
 {
@@ -48,6 +51,8 @@ class Card: public QPushButton
 
     private:
 
+        Http_Manager* network;
+        Table* table;
         COLOR color;
         RANK rank;
 
@@ -59,11 +64,15 @@ class Card: public QPushButton
 
     public:
 
-        Card(COLOR color, RANK rank);
-        Card(QString color, QString rank);
+        Card(COLOR color, RANK rank, Table* table=0);
+        Card(QString color, QString rank, Table* table=0);
 
         static QString Get_Rank_Name(RANK rank);
+        static QString Get_Rank_Full_Name(RANK rank);
+        static QString Get_Color_Name(COLOR rank);
         static QString Get_Color_Path(COLOR color);
+
+        void mouseDoubleClickEvent(QMouseEvent* event);
 
 };
 

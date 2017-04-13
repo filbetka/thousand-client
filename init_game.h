@@ -16,6 +16,7 @@ class Init_Game: public QDialog
         QListWidget* users;
         QLineEdit* user_1;
         QLineEdit* user_2;
+        QStringList players;
 
         void Create_Window();
         void Load_Online_Users();
@@ -28,6 +29,8 @@ class Init_Game: public QDialog
     public:
 
         Init_Game(QWidget* parent);
+
+        QStringList Get_Players();
 };
 
 

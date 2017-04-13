@@ -96,3 +96,27 @@ void Init_Game::Start_Game_SLOT()
     }
 }
 
+QStringList Init_Game::Get_Players()
+{
+    if (this->players.isEmpty())
+    {
+            // create post
+        Post_Data data = this->network->Create_Data();
+        data.Set_Path("game/game_users/");
+
+            // send post
+        QJsonObject reply = this->network->Send(data);
+        QJsonArray users = reply.value("users").toArray();
+
+        for (int k = 0; k < 3; ++k)
+        {
+            QString user = users.at(k).toObject()
+                    .value("username").toString();
+
+            this->players.append(user);
+        }
+    }
+
+    return this->players;
+}
+

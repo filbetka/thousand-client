@@ -5,6 +5,7 @@
 #include "style.h"
 #include "http.h"
 class Chat;
+class Game;
 
 
 class Message_Edit: public QTextEdit
@@ -31,8 +32,9 @@ class Chat : public QWidget
     private:
 
         Http_Manager* network;
-        QListWidget* message_list;
+        Game* game;
 
+        QListWidget* message_list;
         QJsonArray old_messages;
 
         void Create_Chat();
@@ -41,7 +43,7 @@ class Chat : public QWidget
 
     public:
 
-        Chat();
+        Chat(Game* game);
 
         void Send_New_Message(QString message);
         void Load_All_Messages(QJsonObject reply);

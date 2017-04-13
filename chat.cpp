@@ -1,4 +1,5 @@
 #include "chat.h"
+#include "game.h"
 
 
 Message_Edit::Message_Edit(Chat* chat): chat(chat)
@@ -19,11 +20,12 @@ void Message_Edit::keyPressEvent(QKeyEvent *event)
 
 
 
-Chat::Chat(): QWidget(NULL)
+Chat::Chat(Game* game): QWidget(game)
 {
+    this->network = Http_Manager::Get_Http_Manager();
+    this->game = game;
     this->setObjectName("chat");
 
-    this->network = Http_Manager::Get_Http_Manager();
     this->Create_Chat();
 }
 
@@ -134,7 +136,7 @@ void Chat::Send_New_Message(QString message)
 
         // create post
     Post_Data data = this->network->Create_Data();
-    data.Set_Path("game/chat/");
+    data.Set_Path("chat/");
     data.Add_Variable("__add__", "");
     data.Add_Variable("message", message);
 

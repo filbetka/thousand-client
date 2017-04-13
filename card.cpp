@@ -1,4 +1,5 @@
 #include "card.h"
+#include "table.h"
 
 
 Rotated_Text::Rotated_Text(QString text): QLabel(text)
@@ -19,17 +20,19 @@ void Rotated_Text::paintEvent(QPaintEvent* event)
 
 
 
-Card::Card(COLOR color, RANK rank):
-    QPushButton(NULL)
+Card::Card(COLOR color, RANK rank, Table* table):
+    QPushButton(table)
 {
+    this->table = table;
     this->color = color;
     this->rank = rank;
     this->Create_Card();
 }
 
-Card::Card(QString color, QString rank):
-    QPushButton(NULL)
+Card::Card(QString color, QString rank, Table* table):
+    QPushButton(table)
 {
+    this->table = table;
     this->color = this->Get_Color(color);
     this->rank = this->Get_Rank(rank);
     this->Create_Card();
@@ -37,6 +40,8 @@ Card::Card(QString color, QString rank):
 
 void Card::Create_Card()
 {
+    this->network = Http_Manager::Get_Http_Manager();
+
         // layout
     QVBoxLayout* layout = new QVBoxLayout;
     layout->setSpacing(0);
@@ -130,6 +135,23 @@ RANK Card::Get_Rank(QString rank)
     return NONE_RANK;
 }
 
+QString Card::Get_Color_Name(COLOR color)
+{
+    if (color == HEART)
+        return "Heart";
+
+    if (color == DIAMOND)
+        return "Diamond";
+
+    if (color == CLOVER)
+        return "Clover";
+
+    if (color == SPADES)
+        return "Spades";
+
+    return "";
+}
+
 QString Card::Get_Rank_Name(RANK rank)
 {
     switch (rank)
@@ -148,6 +170,35 @@ QString Card::Get_Rank_Name(RANK rank)
 
         case JACK:
             return "J";
+
+        case _9:
+            return "9";
+
+        case NONE_RANK:
+            return "";
+    }
+
+    return "";
+}
+
+QString Card::Get_Rank_Full_Name(RANK rank)
+{
+    switch (rank)
+    {
+        case ACE:
+            return "Ace";
+
+        case _10:
+            return "10";
+
+        case KING:
+            return "King";
+
+        case QUEEN:
+            return "Queen";
+
+        case JACK:
+            return "Jack";
 
         case _9:
             return "9";
@@ -180,6 +231,22 @@ QString Card::Get_Color_Path(COLOR color)
     }
 
     return "";
+}
+
+void Card::mouseDoubleClickEvent(QMouseEvent* event)
+{
+    if (!this->table)
+        return;
+
+    Post_Data data = this->network->Create_Data();
+    data.Set_Path("game/throw_card/");
+    data.Add_Variable("__throw__", "");
+    data.Add_Variable("color", this->Get_Color_Name(this->color));
+    data.Add_Variable("rank", this->Get_Rank_Full_Name(this->rank));
+
+        // send post
+    QJsonObject reply = this->network->Send(data);    
+    this->table->Check_Stock(reply);
 }
 
 

@@ -20,7 +20,9 @@ SOURCES += main.cpp\
     style.cpp \
     chat.cpp \
     table.cpp \
-    init_game.cpp
+    init_game.cpp \
+    bidding.cpp \
+    dealing_stock.cpp
 
 HEADERS  += game.h \
     http.h \
@@ -29,4 +31,6 @@ HEADERS  += game.h \
     style.h \
     chat.h \
     table.h \
-    init_game.h
+    init_game.h \
+    bidding.h \
+    dealing_stock.h
