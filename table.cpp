@@ -117,12 +117,6 @@ void Table::Clear_Stock()
 
         // send post
     QJsonObject reply = this->network->Send(data);
-    if (reply.contains("status"))
-        if (!reply.value("status").toBool())
-            this->Clear_Stock();
-
-    if (!reply.contains("status"))
-        this->Clear_Stock();
 }
 
 void Table::Load_Cards(QJsonObject reply)
@@ -226,11 +220,8 @@ void Table::Check_Stock(QJsonObject reply)
         // check if clear stock
     if (this->old_stock.size() >= 2)
     {
-        if (reply.value("status").toBool())
-        {
-                // clear stock after two second
-            timer->start(2000);
-        }
+            // clear stock after two second
+        timer->start(2000);
     }
 }
 
