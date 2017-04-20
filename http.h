@@ -39,7 +39,7 @@ class Http_Request: public QObject
         QEventLoop* event_loop;
         QString csrf;
 
-    public:
+    private:
 
         Http_Request();
 
@@ -48,6 +48,8 @@ class Http_Request: public QObject
 
         void Set_CSRF(QString url);
         QString Get_CSRF();
+
+    friend class Http_Manager;
 
 };
 

@@ -30,9 +30,13 @@ void Game::Create_Window()
     QObject::connect(logout, SIGNAL(clicked(bool)),
                      this, SLOT(Logout_SLOT()));
 
+    Style create_style("QPushButton");
+    create_style.Add_Value("font-size", "20px");
+    create_style.Add_Value("background-color", "darkgreen");
+
     QPushButton* create_game = new QPushButton("Create\ngame");
     create_game->setMinimumHeight(70);
-    create_game->setStyleSheet(button_style.Get_Style());
+    create_game->setStyleSheet(create_style.Get_Style());
     QObject::connect(create_game, SIGNAL(clicked(bool)),
                      this, SLOT(Create_Game_SLOT()));
 

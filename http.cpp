@@ -89,7 +89,7 @@ QJsonObject Http_Request::POST(Post_Data data)
 
 void Http_Request::Set_CSRF(QString url)
 {
-    QJsonObject reply = this->GET(url);
+    static QJsonObject reply = this->GET(url);
     this->csrf = reply.value("csrfmiddlewaretoken").toString();
 }
 
@@ -108,8 +108,14 @@ Http_Manager::Http_Manager(QString url)
 
 Http_Manager* Http_Manager::Get_Http_Manager()
 {
-    static Http_Manager* connection =
-            new Http_Manager("http://localhost:8000/");
+    static QString URL = "http://localhost:8000/";
+    static Http_Manager first(URL);
+    static QNetworkCookieJar* cookie =
+            first.http.network->cookieJar();
+
+    Http_Manager* connection = new Http_Manager(URL);
+    connection->http.network->setCookieJar(cookie);
+    connection->http.csrf = first.http.csrf;
 
     return connection;
 }
@@ -132,6 +138,3 @@ Post_Data Http_Manager::Create_Data()
 
     return data;
 }
-
-
-

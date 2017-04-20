@@ -162,6 +162,10 @@ void Bidding::Show_Message(QJsonObject reply)
             box.setText("It's not number");
             break;
 
+        case 4:
+            box.setText("Number of points is too big");
+            break;
+
         default:
             return;
     }
