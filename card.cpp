@@ -49,12 +49,14 @@ void Card::Create_Card()
         // up name
     QHBoxLayout* up_layout = new QHBoxLayout;
     QLabel* up_name = new QLabel(this->Get_Rank_Name(this->rank));
+    up_name->setObjectName("name");
     up_layout->addWidget(up_name);
     up_layout->addSpacerItem(new QSpacerItem(1, 1, QSizePolicy::Expanding));
 
         // bottom name
     QHBoxLayout* bottom_layout = new QHBoxLayout;
     Rotated_Text* bottom_name = new Rotated_Text(this->Get_Rank_Name(this->rank));
+    bottom_name->setObjectName("name");
     bottom_layout->addSpacerItem(new QSpacerItem(1, 1, QSizePolicy::Expanding));
     bottom_layout->addWidget(bottom_name);
 
@@ -78,7 +80,7 @@ void Card::Set_Style()
     Style card("#card");
     card.Add_Value("background-color", "white");
 
-    Style text("QLabel");
+    Style text("#name");
     text.Add_Value("font-size", "25px");
     text.Add_Value("font", "bold");
 
@@ -245,7 +247,20 @@ void Card::mouseDoubleClickEvent(QMouseEvent* event)
     data.Add_Variable("rank", this->Get_Rank_Full_Name(this->rank));
 
         // send post
-    QJsonObject reply = this->network->Send(data);    
+    QJsonObject reply = this->network->Send(data);
+    if (reply.value("status").toBool() == false)
+    {
+            // message
+        QString text = "Selected card is not valid because "
+                       "is different color than first card in "
+                       "stock or the card have too small rank. "
+                       "Check also if it's your turn.";
+
+        QMessageBox message(this);
+        message.setText(text);
+        message.exec();
+    }
+
     this->table->Check_Stock(reply);
 }
 

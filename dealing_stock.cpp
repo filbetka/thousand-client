@@ -24,6 +24,7 @@ void Row_Card::Create()
 
 Dealing_Stock::Dealing_Stock(Game* game)
 {
+    this->setWindowTitle("Dealing cards");
     this->network = Http_Manager::Get_Http_Manager();
     this->game = game;
     this->Create_Window();

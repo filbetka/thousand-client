@@ -3,6 +3,7 @@
 
 User::User(QWidget *parent): QDialog(parent)
 {
+    this->setWindowTitle("Thousand Login");
     this->setWindowModality(Qt::WindowModal);
 
     this->network = Http_Manager::Get_Http_Manager();

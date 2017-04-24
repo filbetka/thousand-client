@@ -179,11 +179,6 @@ void Table::Load_Stock(QJsonObject reply)
 
 void Table::Update_Users(QJsonObject reply)
 {
-        // current user
-    QString current_user = reply.value("current_user").toString();
-    if (!this->current_user->text().contains(current_user))
-        this->current_user->setText("Current user:\n" + current_user);
-
         // get users
     QString user = this->game->user->Get_Username();
     QJsonArray user_status = reply.value("users_status").toArray();
@@ -196,7 +191,20 @@ void Table::Update_Users(QJsonObject reply)
     {
         QJsonObject temp_user = user_status[k].toObject();
         if (temp_user.value("user__username").toString() == user)
+        {
+                // current user
+            QString current_user = reply.value("current_user").toString();
+            if (!this->current_user->text().contains(current_user))
+            {
+                QString text = "Your score: " +
+                        QString::number(temp_user.value("score").toInt()) +
+                        "\n\nCurrent user:\n" + current_user;
+
+                this->current_user->setText(text);
+            }
+
             user_status.removeAt(k);
+        }
     }
 
     QJsonObject first_user = user_status.at(0).toObject();

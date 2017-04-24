@@ -23,7 +23,8 @@ SOURCES += main.cpp\
     table.cpp \
     init_game.cpp \
     bidding.cpp \
-    dealing_stock.cpp
+    dealing_stock.cpp \
+    score_board.cpp
 
 HEADERS  += game.h \
     http.h \
@@ -34,4 +35,5 @@ HEADERS  += game.h \
     table.h \
     init_game.h \
     bidding.h \
-    dealing_stock.h
+    dealing_stock.h \
+    score_board.h

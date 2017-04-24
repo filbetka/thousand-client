@@ -13,14 +13,14 @@ class Init_Game: public QDialog
     private:
 
         Http_Manager* network;
-        QListWidget* users;
-        QLineEdit* user_1;
-        QLineEdit* user_2;
+        QListWidget* first_player;
+        QListWidget* second_player;
         QStringList players;
 
         void Create_Window();
-        void Load_Online_Users();
         void Add_User_Widget(QString username);
+        QString Get_Selected_User(QListWidget* list);
+        bool Validate_Selected();
 
     private slots:
 
@@ -31,6 +31,7 @@ class Init_Game: public QDialog
         Init_Game(QWidget* parent);
 
         QStringList Get_Players();
+        void Load_Online_Users();
 };
 
 

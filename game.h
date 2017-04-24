@@ -8,6 +8,7 @@
 #include "init_game.h"
 #include "bidding.h"
 #include "dealing_stock.h"
+#include "score_board.h"
 
 
 class Game: public QMainWindow
@@ -22,15 +23,21 @@ class Game: public QMainWindow
         Chat* chat;
         Init_Game* init_game;
         Bidding* bidding;
+        Score_Board* scores;
+
+        QString marriage;
 
         void Create_Window();
         void Launch_Bidding(QJsonObject reply);
         void Winner_Bidding(QJsonObject reply);
+        void Check_Marriage(QJsonObject reply);
 
     private slots:
 
         void Logout_SLOT();
         void Create_Game_SLOT();
+        void Score_Board_SLOT();
+        void Leave_Game_SLOT();
         void Get_Status_Game();
 
     public:
