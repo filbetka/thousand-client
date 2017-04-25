@@ -31,6 +31,7 @@ class Game: public QMainWindow
         void Launch_Bidding(QJsonObject reply);
         void Winner_Bidding(QJsonObject reply);
         void Check_Marriage(QJsonObject reply);
+        void Game_Over(QJsonObject reply);
 
     private slots:
 

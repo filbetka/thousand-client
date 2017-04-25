@@ -137,6 +137,21 @@ void Game::Check_Marriage(QJsonObject reply)
     message.exec();
 }
 
+void Game::Game_Over(QJsonObject reply)
+{
+    bool game_over = reply.value("game_over").toBool();
+    if (game_over)
+    {
+        QString winner = reply.value("winner").toString();
+
+        QMessageBox message(this);
+        message.setText("Game over! Winner: " + winner);
+        message.exec();
+
+        this->Leave_Game_SLOT();
+    }
+}
+
 void Game::Logout_SLOT()
 {
     this->user->Sign_Out();
@@ -176,6 +191,7 @@ void Game::Get_Status_Game()
     this->scores->Load_Scores(reply);
     this->Launch_Bidding(reply);
     this->Winner_Bidding(reply);
+    this->Game_Over(reply);
 }
 
 void Game::closeEvent(QCloseEvent* event)
