@@ -108,7 +108,7 @@ Http_Manager::Http_Manager(QString url)
 
 Http_Manager* Http_Manager::Get_Http_Manager()
 {
-    static QString URL = "http://localhost:8000/";
+    static QString URL = "http://thousand.arbuz.team/"; //"http://localhost:8000/";
     static Http_Manager first(URL);
     static QNetworkCookieJar* cookie =
             first.http.network->cookieJar();
